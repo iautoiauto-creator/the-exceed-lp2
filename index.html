@@ -63,9 +63,10 @@
   }
   .cta-btn:hover{
     background:var(--gold-hover);
-    transform:translateY(-3px);
-    box-shadow:0 8px 24px rgba(184,150,46,.45);
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(184,150,46,.5);
   }
+  .cta-btn:active{transform:translateY(-1px)}
   .cta-btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   .cta-note{font-size:13px;color:var(--muted);margin-top:12px}
 
@@ -236,11 +237,45 @@
 
   footer{background:#0A0D12;color:#7A828E;font-size:12px;text-align:center;padding:28px 24px;line-height:1.8}
 
-  /* ---------- スクロール出現 ---------- */
-  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.on{opacity:1;transform:none}
+  /* ---------- スクロール出現（要素ごとに下→上へ順番にフェードイン） ---------- */
+  /* セクション直下の要素（見出し・テキスト・グリッド等）を順番に */
+  .reveal > *{
+    opacity:0;transform:translateY(26px);
+    transition:opacity .65s ease, transform .65s cubic-bezier(.16,.72,.24,1);
+  }
+  .reveal.on > *{opacity:1;transform:none}
+  .reveal.on > *:nth-child(1){transition-delay:0s}
+  .reveal.on > *:nth-child(2){transition-delay:.09s}
+  .reveal.on > *:nth-child(3){transition-delay:.18s}
+  .reveal.on > *:nth-child(4){transition-delay:.27s}
+  .reveal.on > *:nth-child(5){transition-delay:.36s}
+  /* カードのグリッド/FAQリストは箱ごとではなく、中の要素を1つずつ */
+  .reveal > .pain-list,.reveal > .grid,.reveal > .voice-grid,.reveal > .solution-grid,.reveal > .faq-list{
+    opacity:1;transform:none;transition:none;
+  }
+  .reveal .pain-item,.reveal .st-card,.reveal .v-card,.reveal .sol-card{
+    opacity:0;transform:translateY(26px);
+    transition:opacity .6s ease, transform .6s cubic-bezier(.16,.72,.24,1);
+  }
+  .reveal.on .pain-item,.reveal.on .st-card,.reveal.on .v-card,.reveal.on .sol-card{opacity:1;transform:none}
+  .reveal.on .pain-item:nth-child(1),.reveal.on .st-card:nth-child(1),.reveal.on .v-card:nth-child(1),.reveal.on .sol-card:nth-child(1){transition-delay:.12s}
+  .reveal.on .pain-item:nth-child(2),.reveal.on .st-card:nth-child(2),.reveal.on .v-card:nth-child(2),.reveal.on .sol-card:nth-child(2){transition-delay:.22s}
+  .reveal.on .pain-item:nth-child(3),.reveal.on .st-card:nth-child(3),.reveal.on .v-card:nth-child(3),.reveal.on .sol-card:nth-child(3){transition-delay:.32s}
+  .reveal.on .pain-item:nth-child(4),.reveal.on .st-card:nth-child(4),.reveal.on .v-card:nth-child(4),.reveal.on .sol-card:nth-child(4){transition-delay:.42s}
+  /* FAQの各項目も順番に */
+  .reveal .faq-list details{
+    opacity:0;transform:translateY(20px);
+    transition:opacity .55s ease, transform .55s cubic-bezier(.16,.72,.24,1);
+  }
+  .reveal.on .faq-list details{opacity:1;transform:none}
+  .reveal.on .faq-list details:nth-child(1){transition-delay:.1s}
+  .reveal.on .faq-list details:nth-child(2){transition-delay:.2s}
+  .reveal.on .faq-list details:nth-child(3){transition-delay:.3s}
+  .reveal.on .faq-list details:nth-child(4){transition-delay:.4s}
   @media (prefers-reduced-motion:reduce){
-    .reveal{opacity:1;transform:none;transition:none}
+    .reveal > *,
+    .reveal .pain-item,.reveal .st-card,.reveal .v-card,.reveal .sol-card,
+    .reveal .faq-list details{opacity:1;transform:none;transition:none;transition-delay:0s}
     .cta-btn{transition:none}
     html{scroll-behavior:auto}
   }
